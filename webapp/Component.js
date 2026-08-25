@@ -16,6 +16,9 @@ sap.ui.define([
          */
         init: function () {
             UIComponent.prototype.init.apply(this, arguments);
+
+            // Create the views based on the routing configuration
+            this.getRouter().initialize();
         },
 
         /**

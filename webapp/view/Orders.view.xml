@@ -1,0 +1,156 @@
+<mvc:View
+    controllerName="com.clause.blockedorders.controller.Orders"
+    displayBlock="true"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:f="sap.f"
+    xmlns:core="sap.ui.core"
+    xmlns="sap.m">
+
+    <f:DynamicPage id="ordersPage" headerExpanded="true" showFooter="false">
+
+        <f:title>
+            <f:DynamicPageTitle>
+                <f:heading>
+                    <Title text="{i18n>appTitle}" />
+                </f:heading>
+                <f:expandedContent>
+                    <Label text="{i18n>appDescription}" />
+                </f:expandedContent>
+            </f:DynamicPageTitle>
+        </f:title>
+
+        <f:content>
+            <VBox>
+
+                <!-- Issue-type filter (from the original requirements) -->
+                <IconTabBar
+                    id="issueFilterBar"
+                    select=".onIssueFilterSelect"
+                    expandable="false"
+                    applyContentPadding="false">
+                    <items>
+                        <IconTabFilter key="all" text="{i18n>filterAll}"
+                            count="{orders>/counts/all}" />
+                        <IconTabSeparator />
+                        <IconTabFilter key="payment" text="{i18n>filterPayment}"
+                            icon="sap-icon://money-bills" iconColor="Negative"
+                            count="{orders>/counts/payment}" />
+                        <IconTabFilter key="delivery" text="{i18n>filterDelivery}"
+                            icon="sap-icon://shipping-status" iconColor="Critical"
+                            count="{orders>/counts/delivery}" />
+                        <IconTabFilter key="other" text="{i18n>filterOther}"
+                            icon="sap-icon://question-mark" iconColor="Neutral"
+                            count="{orders>/counts/other}" />
+                    </items>
+                </IconTabBar>
+
+                <List
+                    id="ordersList"
+                    inset="false"
+                    growing="true"
+                    growingThreshold="20"
+                    noDataText="{i18n>tableNoData}"
+                    items="{
+                        path: 'orders>/BlockedOrders',
+                        sorter: { path: 'OrderDate', descending: true }
+                    }">
+
+                    <headerToolbar>
+                        <OverflowToolbar id="listToolbar">
+                            <Title id="listTitle" text="{i18n>tableHeader}" level="H2" />
+                            <ToolbarSpacer />
+                            <Label
+                                text="{i18n>lblStatusFilter}"
+                                labelFor="statusFilter"
+                                class="sapUiTinyMarginEnd" />
+                            <Select
+                                id="statusFilter"
+                                change=".onFilterChange"
+                                selectedKey="all">
+                                <core:Item key="all" text="{i18n>statusFilterAll}" />
+                                <core:Item key="open" text="{i18n>statusOpen}" />
+                                <core:Item key="in_progress" text="{i18n>statusInProgress}" />
+                                <core:Item key="resolved" text="{i18n>statusResolved}" />
+                            </Select>
+                        </OverflowToolbar>
+                    </headerToolbar>
+
+                    <items>
+                        <CustomListItem>
+                            <HBox
+                                justifyContent="SpaceBetween"
+                                alignItems="Center"
+                                wrap="Wrap"
+                                class="sapUiSmallMargin">
+
+                                <!-- Left: order details -->
+                                <VBox class="sapUiTinyMarginEnd">
+                                    <Title
+                                        text="{orders>CustomerName}"
+                                        level="H3"
+                                        wrapping="true" />
+                                    <Label
+                                        class="sapUiTinyMarginTop"
+                                        text="{orders>OrderID} · {
+                                            path: 'orders>OrderDate',
+                                            type: 'sap.ui.model.type.Date',
+                                            formatOptions: {
+                                                source: { pattern: 'yyyy-MM-dd' },
+                                                style: 'medium'
+                                            }
+                                        }" />
+                                    <HBox class="sapUiTinyMarginTop">
+                                        <ObjectStatus
+                                            class="sapUiSmallMarginEnd"
+                                            text="{
+                                                path: 'orders>IssueType',
+                                                formatter: '.formatter.issueTypeText'
+                                            }"
+                                            state="{
+                                                path: 'orders>IssueType',
+                                                formatter: '.formatter.issueTypeState'
+                                            }" />
+                                        <ObjectStatus
+                                            text="{
+                                                path: 'orders>Status',
+                                                formatter: '.formatter.statusText'
+                                            }"
+                                            state="{
+                                                path: 'orders>Status',
+                                                formatter: '.formatter.statusState'
+                                            }" />
+                                    </HBox>
+                                </VBox>
+
+                                <!-- Right: amount and action -->
+                                <VBox alignItems="End">
+                                    <ObjectNumber
+                                        number="{
+                                            parts: [
+                                                { path: 'orders>OrderAmount' },
+                                                { path: 'orders>Currency' }
+                                            ],
+                                            type: 'sap.ui.model.type.Currency',
+                                            formatOptions: { showMeasure: false }
+                                        }"
+                                        unit="{orders>Currency}"
+                                        emphasized="true" />
+                                    <Button
+                                        class="sapUiTinyMarginTop"
+                                        text="{i18n>btnResolve}"
+                                        type="Emphasized"
+                                        enabled="{= ${orders>Status} !== 'resolved' }"
+                                        press=".onResolveOrder" />
+                                </VBox>
+
+                            </HBox>
+                        </CustomListItem>
+                    </items>
+                </List>
+
+            </VBox>
+        </f:content>
+
+    </f:DynamicPage>
+
+</mvc:View>

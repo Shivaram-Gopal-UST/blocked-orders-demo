@@ -57,6 +57,29 @@
     },
     "resources": {
       "css": []
+    },
+    "routing": {
+      "config": {
+        "routerClass": "sap.m.routing.Router",
+        "viewType": "XML",
+        "viewPath": "com.clause.blockedorders.view",
+        "controlId": "app",
+        "controlAggregation": "pages",
+        "async": true
+      },
+      "routes": [
+        {
+          "pattern": "",
+          "name": "orders",
+          "target": "orders"
+        }
+      ],
+      "targets": {
+        "orders": {
+          "viewId": "orders",
+          "viewName": "Orders"
+        }
+      }
     }
   }
 }
