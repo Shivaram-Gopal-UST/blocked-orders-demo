@@ -1,0 +1,67 @@
+{
+  "BlockedOrders": [
+    {
+      "OrderID": "4500001234",
+      "CustomerName": "Acme Industries GmbH",
+      "OrderAmount": 15750.00,
+      "Currency": "EUR",
+      "IssueType": "payment",
+      "OrderDate": "2026-08-10",
+      "Status": "open"
+    },
+    {
+      "OrderID": "4500001235",
+      "CustomerName": "Nordwind Trading AG",
+      "OrderAmount": 8420.50,
+      "Currency": "EUR",
+      "IssueType": "delivery",
+      "OrderDate": "2026-08-12",
+      "Status": "in_progress"
+    },
+    {
+      "OrderID": "4500001236",
+      "CustomerName": "Solaris Components Ltd",
+      "OrderAmount": 32100.00,
+      "Currency": "USD",
+      "IssueType": "payment",
+      "OrderDate": "2026-08-14",
+      "Status": "open"
+    },
+    {
+      "OrderID": "4500001237",
+      "CustomerName": "Beta Retail Group",
+      "OrderAmount": 2980.75,
+      "Currency": "EUR",
+      "IssueType": "other",
+      "OrderDate": "2026-08-15",
+      "Status": "resolved"
+    },
+    {
+      "OrderID": "4500001238",
+      "CustomerName": "Hansa Logistics KG",
+      "OrderAmount": 12665.00,
+      "Currency": "EUR",
+      "IssueType": "delivery",
+      "OrderDate": "2026-08-18",
+      "Status": "open"
+    },
+    {
+      "OrderID": "4500001239",
+      "CustomerName": "Yamato Precision K.K.",
+      "OrderAmount": 47800.00,
+      "Currency": "JPY",
+      "IssueType": "payment",
+      "OrderDate": "2026-08-19",
+      "Status": "in_progress"
+    },
+    {
+      "OrderID": "4500001240",
+      "CustomerName": "Continental Foods S.A.",
+      "OrderAmount": 5320.40,
+      "Currency": "EUR",
+      "IssueType": "other",
+      "OrderDate": "2026-08-21",
+      "Status": "open"
+    }
+  ]
+}
