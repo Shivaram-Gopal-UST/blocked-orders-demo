@@ -1,0 +1,33 @@
+# UI5 Tooling configuration (used by "ui5 serve" and "ui5 build")
+# Docs: https://sap.github.io/ui5-tooling/
+specVersion: "3.0"
+metadata:
+  # Must match the app ID from manifest.json
+  name: com.clause.blockedorders
+type: application
+
+# The app loads the UI5 runtime from the CDN (see webapp/index.html),
+# so no framework libraries need to be bundled into the build.
+# If you later want a self-contained build, add a "framework" section
+# with name: SAPUI5, version: 1.100.0 and the used libraries.
+
+builder:
+  resources:
+    excludes:
+      # Keep local-development leftovers out of the dist/ output
+      - "/test/**"
+      - "/localService/**"
+
+# --------------------------------------------------------------
+# Optional: TypeScript / modern-JS transpiling.
+# ui5-tooling-transpile is already in package.json; when you
+# migrate to TypeScript, uncomment the sections below.
+# --------------------------------------------------------------
+# builder:
+#   customTasks:
+#     - name: ui5-tooling-transpile-task
+#       afterTask: replaceVersion
+# server:
+#   customMiddleware:
+#     - name: ui5-tooling-transpile-middleware
+#       afterMiddleware: compression
