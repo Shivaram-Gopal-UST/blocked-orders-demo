@@ -1,0 +1,109 @@
+# ============================================================
+# Build & Deploy — UI5 Blocked Orders app → GitHub Pages
+# ============================================================
+# What this workflow does, end to end:
+#   1. Runs automatically whenever you push to the "main" branch
+#   2. Checks out your repository code onto a fresh Linux runner
+#   3. Installs Node.js 18 and your npm dependencies
+#   4. Builds the UI5 app (output goes to the dist/ folder)
+#   5. Publishes dist/ to GitHub Pages
+#
+# ONE-TIME SETUP in your repository (required once):
+#   Settings → Pages → "Build and deployment" → Source: "GitHub Actions"
+# ============================================================
+
+name: Build and Deploy
+
+# ------------------------------------------------------------
+# TRIGGERS — when should this workflow run?
+# ------------------------------------------------------------
+on:
+  push:
+    branches:
+      - main            # every push (or merged PR) to main
+  workflow_dispatch:     # also allows manual runs from the Actions tab
+
+# ------------------------------------------------------------
+# PERMISSIONS — the minimum rights this workflow needs.
+# GitHub Pages deployment uses an OIDC token (id-token) to
+# prove the deployment comes from this workflow.
+# ------------------------------------------------------------
+permissions:
+  contents: read         # read the repo code
+  pages: write           # publish to GitHub Pages
+  id-token: write        # authenticate the Pages deployment
+
+# Never run two deployments at the same time; if a new push
+# arrives mid-deployment, wait for the current one to finish.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  # ==========================================================
+  # JOB 1: BUILD — compile the app and package it for Pages
+  # ==========================================================
+  build:
+    runs-on: ubuntu-latest    # GitHub-hosted Linux virtual machine
+
+    steps:
+      # Step 1: download your repository code onto the runner
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Step 2: install Node.js version 18
+      # (Tip: once you commit a package-lock.json, add
+      #  "cache: npm" here to speed up installs.)
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      # Step 3: install the npm dependencies from package.json
+      # (@ui5/cli provides the "ui5 build" command)
+      - name: Install dependencies
+        run: npm install
+
+      # Step 4: build the UI5 app.
+      # Runs the "build" script from package.json, which calls
+      # "ui5 build" — output lands in the dist/ folder with
+      # minified sources and a Component-preload.js bundle.
+      - name: Build UI5 application
+        run: npm run build
+
+      # Step 5: copy .nojekyll into the build output.
+      # GitHub Pages runs Jekyll by default, which ignores
+      # files/folders starting with "_" or "."; this empty
+      # marker file disables Jekyll so all UI5 resources are
+      # served as-is.
+      - name: Disable Jekyll processing
+        run: cp .nojekyll dist/.nojekyll
+
+      # Step 6: upload dist/ as a "Pages artifact" — the
+      # package the deploy job below will publish.
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  # ==========================================================
+  # JOB 2: DEPLOY — publish the artifact to GitHub Pages
+  # ==========================================================
+  deploy:
+    needs: build              # only runs if the build job succeeded
+
+    # Links this job to the "github-pages" environment so the
+    # live URL shows up on the workflow run and in the repo.
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      # Takes the artifact uploaded above and deploys it.
+      # After this step, the app is live at:
+      #   https://<your-username>.github.io/<repository-name>/
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,14 @@
+{
+  "name": "blockedorders",
+  "version": "1.0.0",
+  "description": "SAP Fiori/UI5 application to review and resolve blocked sales orders",
+  "private": true,
+  "scripts": {
+    "start": "ui5 serve --open index.html",
+    "build": "ui5 build --clean-dest"
+  },
+  "devDependencies": {
+    "@ui5/cli": "^3.9.2",
+    "ui5-tooling-transpile": "^3.5.0"
+  }
+}

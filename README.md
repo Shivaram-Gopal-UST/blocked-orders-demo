@@ -37,34 +37,32 @@ blockedorders/
 
 ## Running locally
 
-The app bootstraps UI5 from the public CDN, so any static file server works.
-
-**Option 1 — UI5 CLI (recommended for development):**
-
 ```bash
-npm install --global @ui5/cli   # once
-cd blockedorders
-ui5 init                        # generates ui5.yaml on first run
-ui5 serve --open webapp/index.html
+npm install     # installs @ui5/cli and tooling
+npm start       # serves the app at http://localhost:8080/index.html
 ```
 
-**Option 2 — any static server:**
+To create a production build in `dist/`:
 
 ```bash
-cd blockedorders/webapp
-npx serve .
-# then open http://localhost:3000
+npm run build
 ```
 
 Note: opening `index.html` directly from the filesystem (`file://`) will not
 work because the manifest and mock data are loaded via HTTP.
 
+## CI/CD
+
+Every push to `main` triggers `.github/workflows/build-and-deploy.yml`,
+which installs dependencies, runs `ui5 build`, and publishes `dist/` to
+GitHub Pages. One-time repo setup: **Settings → Pages → Source: GitHub
+Actions**.
+
 ## Live demo
 
-_The live demo will be published here once deployed (e.g., GitHub Pages,
-SAP BTP HTML5 Application Repository, or SAP Build Work Zone):_
+Once the first workflow run completes, the app is live at:
 
-**URL:** _TBD_
+**https://&lt;your-username&gt;.github.io/&lt;repository-name&gt;/**
 
 ## Next steps
 
