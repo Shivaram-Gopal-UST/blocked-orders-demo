@@ -1,6 +1,6 @@
 # Blocked Orders (com.clause.blockedorders)
 
-A  SAP Fiori / UI5 freestyle application to review and manage blocked
+A simple SAP Fiori / UI5 freestyle application to review and manage blocked
 sales orders. Built against **UI5 1.100** with the Horizon theme.
 
 ## What it does
